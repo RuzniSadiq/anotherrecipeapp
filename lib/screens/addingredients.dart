@@ -4,10 +4,10 @@ import 'package:anotherrecipeapp/databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'models/recipe.dart';
+import '../models/recipe.dart';
 
 //here we are creating the cards
-class TaskCardWidget extends StatelessWidget {
+class addIngredients extends StatelessWidget {
   //adding the ? allows the variable to be nullable
   //the title variable is for the title
   final List? name;
@@ -16,7 +16,7 @@ class TaskCardWidget extends StatelessWidget {
 
 
   //constructor
-  TaskCardWidget({this.id, this.name});
+  addIngredients({this.id, this.name});
 
   @override
 
@@ -24,13 +24,33 @@ class TaskCardWidget extends StatelessWidget {
     DatabaseHelper _db = DatabaseHelper();
     print(id);
     final controllers = TextEditingController();
-    return new MaterialApp(
-        home: new Scaffold(
-          appBar: new AppBar(
-            title: new Text('Ingredients Used'),
-          ),
+    return new SafeArea(
+        child: Scaffold(
+          // appBar: new AppBar(
+          //   title: new Text('Ingredients Used'),
+          // ),
           body: Column(
             children: [
+              Container(
+                height: 120.0,
+                width: double.infinity,
+
+                decoration: BoxDecoration(
+                  color: Color(0xFFffffe6),
+
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Add Ingredients",
+                      style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.w600
+                      ),),
+                  ),
+                ),
+              ),
               TextField(
                 controller: controllers,
               ),
@@ -39,6 +59,16 @@ class TaskCardWidget extends StatelessWidget {
 
                 var list = [controllers.text];
                 FirebaseFirestore.instance.collection('recipe').doc(id).update({"ingredients": FieldValue.arrayUnion(list)});
+                controllers..text="";
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Row(
+                    children: const [
+                      Icon(Icons.playlist_add_check, color: Colors.greenAccent,),
+                      SizedBox(width:20),
+                      Expanded(child: Text('Ingredient Added Successfully!')),
+                    ],
+                  ),
+                ));
                 // final user = Recipe (
                 //   //document id
                 //   //id: docUser.id,

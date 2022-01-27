@@ -36,6 +36,18 @@ class DatabaseHelper{
   }
 
 
+
+  Future updateRecipe(Recipe recipe, {String? idy}) async{
+
+    final docUser = FirebaseFirestore.instance.collection('recipe').doc(idy);
+
+    //recipe.id = docUser.id;
+
+    final json = recipe.toJson();
+    //create document and write data to firebase
+    await docUser.update(json);
+  }
+
   Future createRecipe(Recipe recipe) async{
 
     final docUser = FirebaseFirestore.instance.collection('recipe').doc();

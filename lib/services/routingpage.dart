@@ -1,5 +1,5 @@
 import 'package:anotherrecipeapp/models/model.dart';
-import 'package:anotherrecipeapp/screens/addusers.dart';
+import 'package:anotherrecipeapp/screens/addrecipes.dart';
 import 'package:anotherrecipeapp/screens/homepagey.dart';
 import 'package:anotherrecipeapp/screens/menu/menu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -1,6 +1,6 @@
 import 'package:anotherrecipeapp/databasehelper.dart';
 import 'package:anotherrecipeapp/models/recipe.dart';
-import 'package:anotherrecipeapp/mywidget.dart';
+import 'package:anotherrecipeapp/screens/addingredients.dart';
 import 'package:anotherrecipeapp/screens/loginpage.dart';
 import 'package:anotherrecipeapp/screens/viewrecipedetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'addusers.dart';
+import 'addrecipes.dart';
 
 class RecipeCategoryDetails extends StatefulWidget {
   final String rool;
@@ -124,14 +124,14 @@ class _RecipeCategoryDetailsState extends State<RecipeCategoryDetails> {
               const SizedBox(height: 24,),
 
 
-              (widget.rool == 'Admin')
-              ?ElevatedButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Addusers()));
-
-
-
-              }, child: Text('Add recipe')):Container(),
+              // (widget.rool == 'Admin')
+              // ?ElevatedButton(onPressed: (){
+              //   Navigator.of(context).push(MaterialPageRoute(
+              //       builder: (context) => Addusers()));
+              //
+              //
+              //
+              // }, child: Text('Add recipe')):Container(),
               ]
           ),
         )

@@ -1,7 +1,8 @@
 import 'package:anotherrecipeapp/animation/animation.dart';
 import 'package:anotherrecipeapp/databasehelper.dart';
 import 'package:anotherrecipeapp/models/users.dart';
-import 'package:anotherrecipeapp/mywidget.dart';
+import 'package:anotherrecipeapp/screens/addingredients.dart';
+import 'package:anotherrecipeapp/screens/editrecipespage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 
-import 'addusers.dart';
+import 'addrecipes.dart';
+import 'deleteIngredients.dart';
 
 class ViewRecipeDetails extends StatefulWidget {
   //const ViewRecipeDetails({Key? key}) : super(key: key);
@@ -69,7 +71,70 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
 
                   DelayedDisplay(
                     delay: const Duration(microseconds: 600),
-                    child: Container(
+                    child:
+                    (widget.rool == 'Admin')
+                    ?Stack(
+                      children: <Widget>[
+
+
+                        Container(
+                          height: 300,
+                          foregroundDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${widget.recipeimage}'),
+                              fit: BoxFit.cover,
+
+                            ),
+
+                          ),
+
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10.0, right: 10.0),
+                                child: ElevatedButton(onPressed: (){
+                                  _db.deletemethod(widget.recipeid!);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Row(
+                                      children: const [
+                                        Icon(Icons.delete_forever_sharp, color: Colors.red,),
+                                        SizedBox(width:20),
+                                        Expanded(child: Text('Deleted Successfully!')),
+                                      ],
+                                    ),
+                                  ));
+                                  Navigator.pop(context);
+
+                                },child: Icon(Icons.delete_forever, size: 30.0, color: Colors.white,)),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10.0, right: 10.0),
+                                child: ElevatedButton(onPressed: (){
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                  EditRecipeDetails(id: widget.id, rool: widget.rool, email: widget.email, name: widget.name, recipeid: widget.recipeid, ingredients: widget.ingredients, category: widget.category, recipeimage: widget.recipeimage, instructions: widget.instructions, preparationtime: widget.preparationtime,),
+                                  ));
+                                },child: Icon(Icons.edit, size: 30.0, color: Colors.white,)),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+                      ],
+                    )
+                        :
+                    Container(
                       height: 300,
                       foregroundDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
@@ -81,7 +146,9 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                         ),
 
                       ),
+
                     ),
+
                   ),
                   DelayedDisplay(
                     delay: const Duration(microseconds: 600),
@@ -152,10 +219,28 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                               child: Column(
                                 children: [
                                   (x != null)
-                                  ?Text('${widget.ingredients!.length}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20)):
+                                  ?Row(
+                                    children: [
+                                      Text('${widget.ingredients!.length}',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20)),
+                                      InkWell(
+                                          onTap: (){
+                                            // var val=[];   //blank list for add elements which you want to delete
+                                            // val.add('Chocolate 250');
+                                            // FirebaseFirestore.instance.collection("recipe").doc(widget.recipeid).update({
+                                            //
+                                            //   "ingredients":FieldValue.arrayRemove(val) });
+                                            Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (context) => deleteIngredients
+                                                  (id: widget.recipeid, ingredients: widget.ingredients)));
+
+                                          },
+                                          child: Icon(Icons.edit, size: 20.0,))
+                                    ],
+                                  )
+                                      :
                                   Text("0",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -216,6 +301,7 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                             children: [
                               for (var nw in x)
                               Text("$nw, "),
+
                             ],
 
                         )
@@ -250,6 +336,21 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                         ],
                       ),
                     ),
+
+                  (widget.rool == 'Admin')
+                      ?ElevatedButton(onPressed: (){
+                    var val=[];   //blank list for add elements which you want to delete
+                    val.add('Chocolate 250');
+                    FirebaseFirestore.instance.collection("recipe").doc(widget.recipeid).update({
+
+                      "ingredients":FieldValue.arrayRemove(val) });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => addIngredients
+                          (id: widget.recipeid, )));
+
+
+
+                  }, child: Text('Add Ingredients')):Container(),
 
 
 
