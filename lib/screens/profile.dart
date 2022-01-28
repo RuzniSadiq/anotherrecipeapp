@@ -1,3 +1,4 @@
+import 'package:anotherrecipeapp/screens/viewfavourites.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -57,6 +58,24 @@ class _AccountProfileState extends State<AccountProfile> {
                 ),
               ),
             ),
+        GestureDetector(
+          onTap: (){
+
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                // TaskCardWidget(id: user.id, name: user.ingredients,)
+                viewFavourites(
+                    id: widget.id,
+                    rool: widget.rool,
+                    email: widget.email,
+
+
+                )
+            ));
+          },
+
+            child: Text("jkasdjkasbdkj")
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: ElevatedButton(onPressed: (){

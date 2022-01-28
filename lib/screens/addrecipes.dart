@@ -14,7 +14,15 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 class Addusers extends StatefulWidget {
-  const Addusers({Key? key}) : super(key: key);
+  //const Addusers({Key? key}) : super(key: key);
+
+  final String rool;
+  final String email;
+  final String id;
+
+
+  Addusers({required this.rool, required this.email, required this.id});
+
 
   @override
   _AddusersState createState() => _AddusersState();
@@ -125,6 +133,7 @@ class _AddusersState extends State<Addusers> {
                         preparationtime: controllerPreparationtime.text,
                         instructions: controllerInstructions.text,
                         recipeimage: xx,
+                        //favourites:
 
 
 

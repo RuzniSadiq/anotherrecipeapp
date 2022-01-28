@@ -23,6 +23,7 @@ class ViewRecipeDetails extends StatefulWidget {
   final String? preparationtime;
   final String? recipeimage;
   final List? ingredients;
+  final List? favourites;
   final String? rool;
   final String? email;
   final String? id;
@@ -39,7 +40,7 @@ class ViewRecipeDetails extends StatefulWidget {
       required this.email,
       required this.recipeid,
       required this.rool,
-      required this.instructions});
+      required this.instructions, required this.favourites});
 
   @override
   _ViewRecipeDetailsState createState() => _ViewRecipeDetailsState();
@@ -134,19 +135,44 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                       ],
                     )
                         :
-                    Container(
-                      height: 300,
-                      foregroundDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                              '${widget.recipeimage}'),
-                          fit: BoxFit.cover,
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          height: 300,
+                          foregroundDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  '${widget.recipeimage}'),
+                              fit: BoxFit.cover,
+
+                            ),
+
+                          ),
 
                         ),
+                        IconButton(
+                          icon: new Icon(Icons.favorite_border),
+                          highlightColor: Colors.pink,
+                          onPressed: (){
+                            //_db.countDocuments(widget.id!).then
+                            //hi yo
+                            var list = [widget.id];
+                            FirebaseFirestore.instance.collection('recipe').doc(widget.recipeid).update({"favourites": FieldValue.arrayUnion(list)});
 
-                      ),
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Row(
+                                children: const [
+                                  Icon(Icons.playlist_add_check, color: Colors.greenAccent,),
+                                  SizedBox(width:20),
+                                  Expanded(child: Text('Ingredient Added Successfully!')),
+                                ],
+                              ),
+                            ));
 
+                          },
+                        ),
+                      ],
                     ),
 
                   ),
@@ -225,7 +251,9 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20)),
-                                      InkWell(
+
+                                      (widget.rool == "Admin")
+                                      ?InkWell(
                                           onTap: (){
                                             // var val=[];   //blank list for add elements which you want to delete
                                             // val.add('Chocolate 250');
@@ -238,6 +266,9 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
 
                                           },
                                           child: Icon(Icons.edit, size: 20.0,))
+
+                                          :
+                                          Container(),
                                     ],
                                   )
                                       :
@@ -346,7 +377,7 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                       "ingredients":FieldValue.arrayRemove(val) });
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => addIngredients
-                          (id: widget.recipeid, )));
+                          (recipeid: widget.recipeid, )));
 
 
 

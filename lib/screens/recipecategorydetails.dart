@@ -149,7 +149,7 @@ class _RecipeCategoryDetailsState extends State<RecipeCategoryDetails> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
                   // TaskCardWidget(id: user.id, name: user.ingredients,)
-            ViewRecipeDetails(id: widget.id, rool: widget.rool, email: widget.email, name: recipe.name, recipeid: recipe.id, ingredients: recipe.ingredients, category: recipe.category, recipeimage: recipe.recipeimage, instructions: recipe.instructions, preparationtime: recipe.preparationtime,)
+            ViewRecipeDetails(id: widget.id, rool: widget.rool, email: widget.email, name: recipe.name, recipeid: recipe.id, ingredients: recipe.ingredients, category: recipe.category, recipeimage: recipe.recipeimage, instructions: recipe.instructions, preparationtime: recipe.preparationtime, favourites: recipe.favourites,)
 
           ));
         },

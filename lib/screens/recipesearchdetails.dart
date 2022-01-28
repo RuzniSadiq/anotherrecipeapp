@@ -12,19 +12,20 @@ import 'package:intl/intl.dart';
 
 import 'addrecipes.dart';
 
-class Homepagey extends StatefulWidget {
+class RecipeSearchDetails extends StatefulWidget {
   final String rool;
   final String email;
   final String id;
-  Homepagey({required this.rool, required this.email, required this.id});
+  final String name;
+  RecipeSearchDetails({required this.rool, required this.email, required this.id, required this.name});
 
-  //const Homepagey({Key? key}) : super(key: key);
+  //const RecipeSearchDetails({Key? key}) : super(key: key);
 
   @override
-  _HomepageyState createState() => _HomepageyState();
+  _RecipeSearchDetailsState createState() => _RecipeSearchDetailsState();
 }
 
-class _HomepageyState extends State<Homepagey> {
+class _RecipeSearchDetailsState extends State<RecipeSearchDetails> {
 
   List items = [];
   final controllerName = TextEditingController();
@@ -73,7 +74,7 @@ class _HomepageyState extends State<Homepagey> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Browse Recipes",
+                    child: Text("Search Results",
                     style: TextStyle(
                       fontSize: 30.0,
                       fontWeight: FontWeight.w600
@@ -84,7 +85,7 @@ class _HomepageyState extends State<Homepagey> {
 
           Flexible(
             child: StreamBuilder<List<Recipe>>(
-              stream: _db.readUsers(),
+              stream: _db.readNameDetails(widget.name),
                 initialData: [],
 
               builder: (context, snapshot){
@@ -123,14 +124,14 @@ class _HomepageyState extends State<Homepagey> {
               const SizedBox(height: 24,),
 
 
-              (widget.rool == 'Admin')
-              ?ElevatedButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Addusers(id: widget.id, rool: widget.rool, email: widget.email,)));
-
-
-
-              }, child: Text('Add recipe')):Container(),
+              // (widget.rool == 'Admin')
+              // ?ElevatedButton(onPressed: (){
+              //   Navigator.of(context).push(MaterialPageRoute(
+              //       builder: (context) => Addusers()));
+              //
+              //
+              //
+              // }, child: Text('Add recipe')):Container(),
               ]
           ),
         )
@@ -148,7 +149,7 @@ class _HomepageyState extends State<Homepagey> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
                   // TaskCardWidget(id: user.id, name: user.ingredients,)
-            ViewRecipeDetails(id: widget.id, rool: widget.rool, email: widget.email, name: recipe.name, recipeid: recipe.id, ingredients: recipe.ingredients, category: recipe.category, recipeimage: recipe.recipeimage, instructions: recipe.instructions, preparationtime: recipe.preparationtime, favourites: recipe.favourites,)
+            ViewRecipeDetails(id: widget.id, rool: widget.rool, email: widget.email, name: recipe.name, recipeid: recipe.id, ingredients: recipe.ingredients, category: recipe.category, recipeimage: recipe.recipeimage, instructions: recipe.instructions, preparationtime: recipe.preparationtime,favourites: recipe.favourites,)
 
           ));
         },
@@ -162,75 +163,35 @@ class _HomepageyState extends State<Homepagey> {
           child: Column(
             children: [
 
-              Stack(
-                children: <Widget>[
-                  Container(
+              Container(
 
-                    foregroundDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              '${recipe.recipeimage}'),
-                          fit: BoxFit.cover,
-
-                      ),
-                    ),
-                    height: 140.0,
-                    width: double.infinity,
-
-
-                    // child:  Image.network(
-                    //
-                    //     '${user.recipeimage}'),
-
-
-
-
-
-                    // leading: CircleAvatar(child: Image.network(
-                    //     '${user.recipeimage}'),),
-                    // title: Text('${user.category}'),
-                    // subtitle: Text('${user.preparationtime}'),
-
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          '${recipe.recipeimage}'),
+                      fit: BoxFit.cover,
 
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0, top: 10.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        height: 35.0,
-                        width: 35.0,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                            borderRadius: BorderRadius.circular(200),
+                ),
+                height: 140.0,
+                width: double.infinity,
 
-                        ),
-                        child: IconButton(
-                          icon: new Icon(Icons.favorite_border, size: 20.0,),
-                          highlightColor: Colors.pink,
-                          onPressed: (){
-                            //_db.countDocuments(widget.id!).then
-                            //hi yo
-                            var list = [widget.id];
-                            FirebaseFirestore.instance.collection('recipe').doc(recipe.id).update({"favourites": FieldValue.arrayUnion(list)});
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Row(
-                                children: const [
-                                  Icon(Icons.favorite_border, color: Colors.greenAccent,),
-                                  SizedBox(width:20),
-                                  Expanded(child: Text('Added to Favourites')),
-                                ],
-                              ),
-                            ));
+                // child:  Image.network(
+                //
+                //     '${user.recipeimage}'),
 
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+
+
+
+
+                // leading: CircleAvatar(child: Image.network(
+                //     '${user.recipeimage}'),),
+                // title: Text('${user.category}'),
+                // subtitle: Text('${user.preparationtime}'),
+
+
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5.0,top: 10.0),

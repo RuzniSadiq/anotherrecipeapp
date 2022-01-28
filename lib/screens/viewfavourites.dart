@@ -12,19 +12,20 @@ import 'package:intl/intl.dart';
 
 import 'addrecipes.dart';
 
-class Homepagey extends StatefulWidget {
+class viewFavourites extends StatefulWidget {
   final String rool;
   final String email;
   final String id;
-  Homepagey({required this.rool, required this.email, required this.id});
 
-  //const Homepagey({Key? key}) : super(key: key);
+  viewFavourites({required this.rool, required this.email, required this.id});
+
+  //const viewFavourites({Key? key}) : super(key: key);
 
   @override
-  _HomepageyState createState() => _HomepageyState();
+  _viewFavouritesState createState() => _viewFavouritesState();
 }
 
-class _HomepageyState extends State<Homepagey> {
+class _viewFavouritesState extends State<viewFavourites> {
 
   List items = [];
   final controllerName = TextEditingController();
@@ -73,7 +74,7 @@ class _HomepageyState extends State<Homepagey> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Browse Recipes",
+                    child: Text("Favourites",
                     style: TextStyle(
                       fontSize: 30.0,
                       fontWeight: FontWeight.w600
@@ -84,7 +85,7 @@ class _HomepageyState extends State<Homepagey> {
 
           Flexible(
             child: StreamBuilder<List<Recipe>>(
-              stream: _db.readUsers(),
+              stream: _db.readFavouriteDetails(widget.id),
                 initialData: [],
 
               builder: (context, snapshot){
@@ -123,14 +124,14 @@ class _HomepageyState extends State<Homepagey> {
               const SizedBox(height: 24,),
 
 
-              (widget.rool == 'Admin')
-              ?ElevatedButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Addusers(id: widget.id, rool: widget.rool, email: widget.email,)));
-
-
-
-              }, child: Text('Add recipe')):Container(),
+              // (widget.rool == 'Admin')
+              // ?ElevatedButton(onPressed: (){
+              //   Navigator.of(context).push(MaterialPageRoute(
+              //       builder: (context) => Addusers()));
+              //
+              //
+              //
+              // }, child: Text('Add recipe')):Container(),
               ]
           ),
         )
@@ -194,40 +195,29 @@ class _HomepageyState extends State<Homepagey> {
 
 
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0, top: 10.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        height: 35.0,
-                        width: 35.0,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                            borderRadius: BorderRadius.circular(200),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: new Icon(Icons.highlight_remove),
+                      highlightColor: Colors.pink,
+                      color: Colors.red,
+                      onPressed: (){
+                        //_db.countDocuments(widget.id!).then
+                        //hi yo
+                        var list = [widget.id];
+                        FirebaseFirestore.instance.collection('recipe').doc(recipe.id).update({"favourites": FieldValue.arrayRemove(list)});
 
-                        ),
-                        child: IconButton(
-                          icon: new Icon(Icons.favorite_border, size: 20.0,),
-                          highlightColor: Colors.pink,
-                          onPressed: (){
-                            //_db.countDocuments(widget.id!).then
-                            //hi yo
-                            var list = [widget.id];
-                            FirebaseFirestore.instance.collection('recipe').doc(recipe.id).update({"favourites": FieldValue.arrayUnion(list)});
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Row(
+                            children: const [
+                              Icon(Icons.highlight_remove, color: Colors.red,),
+                              SizedBox(width:20),
+                              Expanded(child: Text('Removed Successfully!')),
+                            ],
+                          ),
+                        ));
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Row(
-                                children: const [
-                                  Icon(Icons.favorite_border, color: Colors.greenAccent,),
-                                  SizedBox(width:20),
-                                  Expanded(child: Text('Added to Favourites')),
-                                ],
-                              ),
-                            ));
-
-                          },
-                        ),
-                      ),
+                      },
                     ),
                   ),
                 ],

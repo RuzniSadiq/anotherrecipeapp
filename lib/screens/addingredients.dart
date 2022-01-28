@@ -11,18 +11,18 @@ class addIngredients extends StatelessWidget {
   //adding the ? allows the variable to be nullable
   //the title variable is for the title
   final List? name;
-  final String? id;
+  final String? recipeid;
 
 
 
   //constructor
-  addIngredients({this.id, this.name});
+  addIngredients({this.recipeid, this.name});
 
   @override
 
   Widget build(BuildContext context) {
     DatabaseHelper _db = DatabaseHelper();
-    print(id);
+    print(recipeid);
     final controllers = TextEditingController();
     return new SafeArea(
         child: Scaffold(
@@ -57,8 +57,9 @@ class addIngredients extends StatelessWidget {
               const SizedBox(height: 24,),
               ElevatedButton(onPressed: (){
 
+                //hi yo
                 var list = [controllers.text];
-                FirebaseFirestore.instance.collection('recipe').doc(id).update({"ingredients": FieldValue.arrayUnion(list)});
+                FirebaseFirestore.instance.collection('recipe').doc(recipeid).update({"ingredients": FieldValue.arrayUnion(list)});
                 controllers..text="";
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Row(
@@ -106,7 +107,7 @@ class addIngredients extends StatelessWidget {
                             child: Text(nw)),
                       ) ]
                   )
-                      : Text(id.toString()),
+                      : Text(recipeid.toString()),
 
                 ),
               ),
