@@ -85,9 +85,10 @@ class _RecipeSearchDetailsState extends State<RecipeSearchDetails> {
 
           Flexible(
             child: StreamBuilder<List<Recipe>>(
+              //calling the readSearchDetails method in the DatabaseHelper Class
+              //passing the recipe name
               stream: _db.readNameDetails(widget.name),
                 initialData: [],
-
               builder: (context, snapshot){
                 Recipe userz = Recipe();
                 if(snapshot.hasError){
@@ -95,26 +96,13 @@ class _RecipeSearchDetailsState extends State<RecipeSearchDetails> {
                 }
                 //check if we have data
                 if(snapshot.hasData){
-                  //accessing data/users
+                  //accessing data
                   final recipiex =snapshot.data!;
-
-                  //building data/users
-                  //gridview start
-                  // return GridView.count(
-                  //   crossAxisCount: 2,
-                  //   children: recipiex.map(buildUser).toList(),
-
                     return ListView(
                       children: recipiex.map(buildUser).toList(),
-
-
-
                     );
-                  //end
-                  // );
-
                 }else{
-                  return Center(child: CircularProgressIndicator(),);
+                  return const Center(child: CircularProgressIndicator(),);
                 }
 
               }

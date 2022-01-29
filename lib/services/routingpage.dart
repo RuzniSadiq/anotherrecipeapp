@@ -1,19 +1,18 @@
 import 'package:anotherrecipeapp/models/model.dart';
 import 'package:anotherrecipeapp/screens/addrecipes.dart';
-import 'package:anotherrecipeapp/screens/homepagey.dart';
 import 'package:anotherrecipeapp/screens/menu/menu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
-class HomePage extends StatefulWidget {
+class RoutePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _RoutePageState createState() => _RoutePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  _HomePageState();
+class _RoutePageState extends State<RoutePage> {
+  _RoutePageState();
   @override
   Widget build(BuildContext context) {
     return contro();
@@ -54,20 +53,12 @@ class _controState extends State<contro> {
   }
 
   routing() {
-     // if (rooll == 'Student') {
        return Menu(
          rool: loggedInUser.wrool.toString(),
          email: loggedInUser.email.toString(),
          id: loggedInUser.uid.toString(),
          //     id: id,
        );
-
- //    } else {
- //      return Menu(
- //        rool: loggedInUser.wrool.toString(),
- // //       id: id,
- //      );
- //    }
   }
 
   @override

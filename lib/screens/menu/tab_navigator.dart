@@ -2,6 +2,7 @@ import 'package:anotherrecipeapp/screens/addrecipes.dart';
 import 'package:anotherrecipeapp/screens/categories.dart';
 import 'package:anotherrecipeapp/screens/homepagey.dart';
 import 'package:anotherrecipeapp/screens/profile.dart';
+import 'package:anotherrecipeapp/screens/viewfavourites.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -39,7 +40,10 @@ class _TabNavigatorState extends State<TabNavigator> {
     else if(widget.tabItem == "Page2")
       child = Categories(id: widget.id, email: widget.email, rool: widget.rool,);
 
+
     else if(widget.tabItem == "Page3")
+      child = viewFavourites(id: widget.id, email: widget.email, rool: widget.rool,);
+    else if(widget.tabItem == "Page4")
       child = AccountProfile(id: widget.id, email: widget.email, rool: widget.rool,);
 
     return Navigator(

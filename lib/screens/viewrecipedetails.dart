@@ -1,6 +1,5 @@
 import 'package:anotherrecipeapp/animation/animation.dart';
 import 'package:anotherrecipeapp/databasehelper.dart';
-import 'package:anotherrecipeapp/models/users.dart';
 import 'package:anotherrecipeapp/screens/addingredients.dart';
 import 'package:anotherrecipeapp/screens/editrecipespage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,7 +39,8 @@ class ViewRecipeDetails extends StatefulWidget {
       required this.email,
       required this.recipeid,
       required this.rool,
-      required this.instructions, required this.favourites});
+      required this.instructions,
+      required this.favourites});
 
   @override
   _ViewRecipeDetailsState createState() => _ViewRecipeDetailsState();
@@ -56,347 +56,357 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
     var x = widget.ingredients;
     return Scaffold(
         body: SafeArea(
-      child: CustomScrollView(
-          slivers: <Widget>[
-            // SliverPersistentHeader(
-            //   delegate:
-            //   //delegate: MySliverAppBar(expandedHeight: 300, info: widget.info),
-            //   pinned: true,
-            // ),
+      child: CustomScrollView(slivers: <Widget>[
+        // SliverPersistentHeader(
+        //   delegate:
+        //   //delegate: MySliverAppBar(expandedHeight: 300, info: widget.info),
+        //   pinned: true,
+        // ),
 
-            SliverToBoxAdapter(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  DelayedDisplay(
-                    delay: const Duration(microseconds: 600),
-                    child:
-                    (widget.rool == 'Admin')
-                    ?Stack(
-                      children: <Widget>[
-
-
-                        Container(
-                          height: 300,
-                          foregroundDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  '${widget.recipeimage}'),
-                              fit: BoxFit.cover,
-
+        SliverToBoxAdapter(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DelayedDisplay(
+                delay: const Duration(microseconds: 600),
+                child: (widget.rool == 'Admin')
+                    ? Stack(
+                        children: <Widget>[
+                          Container(
+                            height: 300,
+                            foregroundDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              image: DecorationImage(
+                                image: NetworkImage('${widget.recipeimage}'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
 
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 10.0, right: 10.0),
-                                child: ElevatedButton(onPressed: (){
-                                  _db.deletemethod(widget.recipeid!);
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.white
 
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Row(
-                                      children: const [
-                                        Icon(Icons.delete_forever_sharp, color: Colors.red,),
-                                        SizedBox(width:20),
-                                        Expanded(child: Text('Deleted Successfully!')),
-                                      ],
                                     ),
-                                  ));
-                                  Navigator.pop(context);
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => EditRecipeDetails(
+                                            id: widget.id,
+                                            rool: widget.rool,
+                                            email: widget.email,
+                                            name: widget.name,
+                                            recipeid: widget.recipeid,
+                                            ingredients: widget.ingredients,
+                                            category: widget.category,
+                                            recipeimage: widget.recipeimage,
+                                            instructions: widget.instructions,
+                                            preparationtime:
+                                            widget.preparationtime,
+                                          ),
+                                        ));
+                                      },
 
-                                },child: Icon(Icons.delete_forever, size: 30.0, color: Colors.white,)),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 10.0, right: 10.0),
-                                child: ElevatedButton(onPressed: (){
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                  EditRecipeDetails(id: widget.id, rool: widget.rool, email: widget.email, name: widget.name, recipeid: widget.recipeid, ingredients: widget.ingredients, category: widget.category, recipeimage: widget.recipeimage, instructions: widget.instructions, preparationtime: widget.preparationtime,),
-                                  ));
-                                },child: Icon(Icons.edit, size: 30.0, color: Colors.white,)),
-                              ),
-                            ),
-                          ],
-                        ),
+                                      child: Icon(
 
-
-                      ],
-                    )
-                        :
-                    Stack(
-                      children: <Widget>[
-                        Container(
-                          height: 300,
-                          foregroundDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  '${widget.recipeimage}'),
-                              fit: BoxFit.cover,
-
-                            ),
-
-                          ),
-
-                        ),
-                        IconButton(
-                          icon: new Icon(Icons.favorite_border),
-                          highlightColor: Colors.pink,
-                          onPressed: (){
-                            //_db.countDocuments(widget.id!).then
-                            //hi yo
-                            var list = [widget.id];
-                            FirebaseFirestore.instance.collection('recipe').doc(widget.recipeid).update({"favourites": FieldValue.arrayUnion(list)});
-
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Row(
-                                children: const [
-                                  Icon(Icons.playlist_add_check, color: Colors.greenAccent,),
-                                  SizedBox(width:20),
-                                  Expanded(child: Text('Ingredient Added Successfully!')),
-                                ],
-                              ),
-                            ));
-
-                          },
-                        ),
-                      ],
-                    ),
-
-                  ),
-                  DelayedDisplay(
-                    delay: const Duration(microseconds: 600),
-                    child: Container(
-                      padding: const EdgeInsets.all(26.0),
-                      child: Text(
-                        widget.name!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
-                      ),
-                    ),
-                  ),
-
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 26.0, vertical: 10),
-                    child: DelayedDisplay(
-                      delay: const Duration(microseconds: 700),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              offset: Offset(-2, -2),
-                              blurRadius: 12,
-                              color: Color.fromRGBO(0, 0, 0, 0.05),
-                            ),
-                            BoxShadow(
-                              offset: Offset(2, 2),
-                              blurRadius: 5,
-                              color: Color.fromRGBO(0, 0, 0, 0.10),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  Text(
-                                      widget.preparationtime.toString() +
-                                          " Min",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20)),
-                                  Text(
-                                    "Ready in",
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
+                                        Icons.edit,
+                                        size: 30.0,
+                                        color: Colors.blueAccent,
+                                      ),
                                     ),
                                   ),
-                                ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 230.0),
+                                width: 40.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.white
+
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _db.deletemethod(widget.recipeid!);
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Row(
+                                        children: const [
+                                          Icon(
+                                            Icons.delete_forever_sharp,
+                                            color: Colors.red,
+                                          ),
+                                          SizedBox(width: 20),
+                                          Expanded(
+                                              child: Text(
+                                                  'Deleted Successfully!')),
+                                        ],
+                                      ),
+                                    ));
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.delete_outline_sharp,
+                                    size: 30.0,
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
                               ),
                             ),
-                            Container(
-                              height: 30,
-                              width: 2,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            Flexible(
-                              flex: 1,
-                              child: Column(
-                                children: [
-                                  (x != null)
-                                  ?Row(
-                                    children: [
-                                      Text('${widget.ingredients!.length}',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20)),
-
-                                      (widget.rool == "Admin")
-                                      ?InkWell(
-                                          onTap: (){
-                                            // var val=[];   //blank list for add elements which you want to delete
-                                            // val.add('Chocolate 250');
-                                            // FirebaseFirestore.instance.collection("recipe").doc(widget.recipeid).update({
-                                            //
-                                            //   "ingredients":FieldValue.arrayRemove(val) });
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context) => deleteIngredients
-                                                  (id: widget.recipeid, ingredients: widget.ingredients)));
-
-                                          },
-                                          child: Icon(Icons.edit, size: 20.0,))
-
-                                          :
-                                          Container(),
-                                    ],
-                                  )
-                                      :
-                                  Text("0",
+                          ),
+                        ],
+                      )
+                    : Container(
+                        height: 300,
+                        foregroundDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          image: DecorationImage(
+                            image: NetworkImage('${widget.recipeimage}'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+              ),
+              DelayedDisplay(
+                delay: const Duration(microseconds: 600),
+                child: Container(
+                  padding: const EdgeInsets.all(26.0),
+                  child: Text(
+                    widget.name!,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 25),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 26.0, vertical: 10),
+                child: DelayedDisplay(
+                  delay: const Duration(microseconds: 700),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(-2, -2),
+                          blurRadius: 12,
+                          color: Color.fromRGBO(0, 0, 0, 0.05),
+                        ),
+                        BoxShadow(
+                          offset: Offset(2, 2),
+                          blurRadius: 5,
+                          color: Color.fromRGBO(0, 0, 0, 0.10),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              Text(widget.preparationtime.toString() + " Min",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20)),
+                              Text(
+                                "Ready in",
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          width: 2,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              (widget.ingredients != null)
+                                  ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Text('${widget.ingredients!.length}',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20)),
+                                        ),
+                                        (widget.rool == "Admin")
+                                        ?InkWell(
+                                            onTap: () {
+                                              // var val=[];   //blank list for add elements which you want to delete
+                                              // val.add('Chocolate 250');
+                                              // FirebaseFirestore.instance.collection("recipe").doc(widget.recipeid).update({
+                                              //
+                                              //   "ingredients":FieldValue.arrayRemove(val) });
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          deleteIngredients(
+                                                              id: widget
+                                                                  .recipeid,
+                                                              ingredients: widget
+                                                                  .ingredients)));
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.topRight,
+                                              child: Icon(
+                                                Icons.edit,
+                                                size: 20.0,
+                                              ),
+                                            )):Text(""),
+                                      ],
+                                    )
+                                  : Text("0",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20)),
-                                  Text(
-                                    "Ingredients",
-                                    style:
-                                    TextStyle(color: Colors.grey.shade600),
-                                  )
-
-                                ],
-                              ),
-                            ),
-
-
-                          ],
+                              Text(
+                                "Ingredients",
+                                style: TextStyle(color: Colors.grey.shade600),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(26.0),
-                    child: DelayedDisplay(
-                      delay: const Duration(microseconds: 700),
-                      child: Text(
-                        "Ingredients",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                    ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(26.0),
+                child: DelayedDisplay(
+                  delay: const Duration(microseconds: 700),
+                  child: Text(
+                    "Ingredients",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-
-                  (x == null)
-                    ?
-                  Padding(
-                    padding: const EdgeInsets.only(left: 33.0),
-                    child: DelayedDisplay(
-                        delay: const Duration(microseconds: 600),
-                        child: Text("No ingredients")
-                      ),
-                  )
-                      :
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 33.0),
-                    child:
-
-
-                    DelayedDisplay(
-
-                        delay: const Duration(microseconds: 600),
-
-                        child:
-                        Wrap(
-                          //alignment: WrapAlignment.spaceBetween,
-                          direction: Axis.horizontal,
+                ),
+              ),
+              (widget.ingredients == null)
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 33.0),
+                      child: DelayedDisplay(
+                          delay: const Duration(microseconds: 600),
+                          child: Text("No ingredients")),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 33.0),
+                      child: DelayedDisplay(
+                          delay: const Duration(microseconds: 600),
+                          child: Wrap(
+                            //alignment: WrapAlignment.spaceBetween,
+                            direction: Axis.horizontal,
 
                             children: [
-                              for (var nw in x)
-                              Text("$nw, "),
 
+                              if(x!=null)
+                              for (var nw in x) Text("$nw, "),
                             ],
-
-                        )
+                          )),
                     ),
-
-                  ),
-
-                  if (widget.instructions != null)
-                    Padding(
-                      padding: const EdgeInsets.all(26.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Instructions",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Html(
-                            data: widget.instructions,
-                            style: {
-                              'p': Style(
-                                fontSize: FontSize.large,
-                                color: Colors.black,
-                              ),
-                            },
-                          ),
-                        ],
+              if (widget.instructions != null)
+                Padding(
+                  padding: const EdgeInsets.all(26.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Instructions",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
-                    ),
-
-                  (widget.rool == 'Admin')
-                      ?ElevatedButton(onPressed: (){
-                    var val=[];   //blank list for add elements which you want to delete
-                    val.add('Chocolate 250');
-                    FirebaseFirestore.instance.collection("recipe").doc(widget.recipeid).update({
-
-                      "ingredients":FieldValue.arrayRemove(val) });
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => addIngredients
-                          (recipeid: widget.recipeid, )));
-
-
-
-                  }, child: Text('Add Ingredients')):Container(),
-
-
-
-
-
-                ],
+                      const SizedBox(height: 20),
+                      Html(
+                        data: widget.instructions,
+                        style: {
+                          'p': Style(
+                            fontSize: FontSize.large,
+                            color: Colors.black,
+                          ),
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              SizedBox(
+                height: 10,
               ),
-
-            )
-
-            ]
-
-
-
-      ),
+              (widget.rool == 'Admin')
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            onPressed: () {
+                              var val =
+                                  []; //blank list for add elements which you want to delete
+                              val.add('Chocolate 250');
+                              FirebaseFirestore.instance
+                                  .collection("recipe")
+                                  .doc(widget.recipeid)
+                                  .update({
+                                "ingredients": FieldValue.arrayRemove(val)
+                              });
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => addIngredients(
+                                        recipeid: widget.recipeid,
+                                      )));
+                            },
+                            color: Colors.black,
+                            child: Text(
+                              '+ Add Ingredients',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            )),
+                      ],
+                    )
+                  : Container(),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        )
+      ]),
       // child: Container(
       //   child: Column(children: [
       //     Container(

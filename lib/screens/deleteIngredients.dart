@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:anotherrecipeapp/databasehelper.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../models/recipe.dart';
 
@@ -21,7 +21,7 @@ class deleteIngredients extends StatelessWidget {
     DatabaseHelper _db = DatabaseHelper();
     print(id);
     final controllers = TextEditingController();
-    return new SafeArea(
+    return SafeArea(
         child: Scaffold(
       // appBar: new AppBar(
       //   title: new Text('Ingredients Used'),
@@ -29,8 +29,7 @@ class deleteIngredients extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: 120.0,
-            width: double.infinity,
+            height: 100.0,
             decoration: BoxDecoration(
               color: Color(0xFFffffe6),
             ),
@@ -45,99 +44,92 @@ class deleteIngredients extends StatelessWidget {
               ),
             ),
           ),
-          TextField(
-            controller: controllers,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                var list = [controllers.text];
-                // var val=[];   //blank list for add elements which you want to delete
-                // val.add('Chocolate 250');
-                // FirebaseFirestore.instance.collection("recipe").doc(widget.recipeid).update({
-                //
-                //   "ingredients":FieldValue.arrayRemove(val) });
-                FirebaseFirestore.instance
-                    .collection('recipe')
-                    .doc(id)
-                    .update({"ingredients": FieldValue.arrayRemove(list)});
-                controllers..text = "";
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Row(
-                    children: const [
-                      Icon(
-                        Icons.delete_forever_sharp,
-                        color: Colors.red,
+          Flexible(
+            child: ListView(
+              padding: EdgeInsets.all(16),
+              children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 40.0, right: 30.0, left: 30.0),
+                  child: TextField(
+                    controller: controllers,
+                    decoration: InputDecoration(
+                      labelText: "Type what you want to delete..",
+                      contentPadding: const EdgeInsets.only(
+                          left: 14.0, bottom: 8.0, top: 15.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.red),
+                        borderRadius: new BorderRadius.circular(10),
                       ),
-                      SizedBox(width: 20),
-                      Expanded(child: Text('Ingredient Added Successfully!')),
-                    ],
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.red),
+                        borderRadius: new BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
-                ));
-                // final user = Recipe (
-                //   //document id
-                //   //id: docUser.id,
-                //
-                //   ingredients:
-                //   [
-                //
-                //     controllers.text
-                //
-                //   ],
-                //
-                //
-                //
-                // );
-                //_db.createUser(user);
-              },
-              child: Text('Delete')),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: new Center(
-              child: (ingredients != null)
-                  ? Column(// Or Row or whatever :)
-                      children: [
-                      for (var nw in ingredients!)
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                              height: 30.0,
-                              width: 200.0,
-                              decoration: BoxDecoration(
-                                  color: Colors.teal,
-                                  border: Border.all(color: Colors.blueAccent)),
-                              child: Text(nw)),
-                        )
-                    ])
-                  : Text(id.toString()),
+                ),
+              ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 30.0),
+            child: MaterialButton(
+                minWidth: 120,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                onPressed: () {
+                  //assign the typed ingredient into a list
+                  var list = [controllers.text];
+                  FirebaseFirestore.instance
+                      .collection('recipe')
+                      //pass the recipe id to know which document/record to update
+                      .doc(id)
+                      //update method
+                      .update({
+                    //delete the ingredient from the ingredients array
+                    "ingredients": FieldValue.arrayRemove(list)
+                  });
+                  controllers.text = "";
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Row(
+                      children: const [
+                        Icon(
+                          Icons.delete_forever_sharp,
+                          color: Colors.red,
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                            child: Text('Ingredient Deleted Successfully!')),
+                      ],
+                    ),
+                  ));
+                  // final user = Recipe (
+                  //   //document id
+                  //   //id: docUser.id,
+                  //
+                  //   ingredients:
+                  //   [
+                  //
+                  //     controllers.text
+                  //
+                  //   ],
+                  //
+                  //
+                  //
+                  // );
+                  //_db.createUser(user);
+                },
+                color: Colors.black,
+                child: Text(
+                  'Delete',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                )),
           ),
         ],
       ),
     ));
-  }
-
-  List<Text> createChildrenTexts() {
-    // Method 1
-//    List<Text> childrenTexts = List<Text>();
-//    for (String name in list) {
-//      childrenTexts.add(new Text(name, style: new TextStyle(color: Colors.red),));
-//    }
-//    return childrenTexts;
-
-    // Method 2
-    return ingredients!
-        .map((text) => Text(
-              text,
-              style: TextStyle(color: Colors.blue),
-            ))
-        .toList();
-  }
-
-  Widget getTextWidgets(List<String> strings) {
-    //return new Row(children: strings.map((item) => new Text(item)).toList());
-    return Row(children: [for (var nw in ingredients!) Text(nw)]);
   }
 }

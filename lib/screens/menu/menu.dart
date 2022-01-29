@@ -15,11 +15,12 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   String _currentPage = "Page1";
-  List<String> pageKeys = ["Page1", "Page2", "Page3"];
+  List<String> pageKeys = ["Page1", "Page2", "Page3", "Page4"];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "Page1": GlobalKey<NavigatorState>(),
     "Page2": GlobalKey<NavigatorState>(),
     "Page3": GlobalKey<NavigatorState>(),
+    "Page4": GlobalKey<NavigatorState>(),
   };
   int _selectedIndex = 0;
 
@@ -57,6 +58,7 @@ class _MenuState extends State<Menu> {
               _buildOffstageNavigator("Page1"),
               _buildOffstageNavigator("Page2"),
               _buildOffstageNavigator("Page3"),
+              _buildOffstageNavigator("Page4"),
             ]
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -86,10 +88,16 @@ class _MenuState extends State<Menu> {
 
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_outline_sharp),
+              label: 'Favourites',
+
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_sharp),
               label: 'Profile',
 
             ),
+
           ],
           type: BottomNavigationBarType.fixed,
         ),

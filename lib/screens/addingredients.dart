@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:anotherrecipeapp/databasehelper.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../models/recipe.dart';
 
@@ -13,126 +13,111 @@ class addIngredients extends StatelessWidget {
   final List? name;
   final String? recipeid;
 
-
-
   //constructor
   addIngredients({this.recipeid, this.name});
 
   @override
-
   Widget build(BuildContext context) {
     DatabaseHelper _db = DatabaseHelper();
     print(recipeid);
     final controllers = TextEditingController();
-    return new SafeArea(
+    return SafeArea(
         child: Scaffold(
-          // appBar: new AppBar(
-          //   title: new Text('Ingredients Used'),
-          // ),
-          body: Column(
-            children: [
-              Container(
-                height: 120.0,
-                width: double.infinity,
-
-                decoration: BoxDecoration(
-                  color: Color(0xFFffffe6),
-
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Add Ingredients",
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w600
-                      ),),
-                  ),
+      // appBar: new AppBar(
+      //   title: new Text('Ingredients Used'),
+      // ),
+      body: Column(
+        children: [
+          Container(
+            height: 120.0,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Color(0xFFffffe6),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Add Ingredients",
+                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w600),
                 ),
               ),
-              TextField(
-                controller: controllers,
-              ),
-              const SizedBox(height: 24,),
-              ElevatedButton(onPressed: (){
-
-                //hi yo
-                var list = [controllers.text];
-                FirebaseFirestore.instance.collection('recipe').doc(recipeid).update({"ingredients": FieldValue.arrayUnion(list)});
-                controllers..text="";
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Row(
-                    children: const [
-                      Icon(Icons.playlist_add_check, color: Colors.greenAccent,),
-                      SizedBox(width:20),
-                      Expanded(child: Text('Ingredient Added Successfully!')),
-                    ],
-                  ),
-                ));
-                // final user = Recipe (
-                //   //document id
-                //   //id: docUser.id,
-                //
-                //   ingredients:
-                //   [
-                //
-                //     controllers.text
-                //
-                //   ],
-                //
-                //
-                //
-                // );
-                //_db.createUser(user);
-
-              }, child: Text('Create')),
-
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: new Center(
-                  child:
-                    (name != null)
-                  ?Column( // Or Row or whatever :)
-                      children: [ for (var nw in name!) Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Container(
-                          height: 30.0,
-                            width: 200.0,
-                            decoration: BoxDecoration(
-                              color: Colors.teal,
-                                border: Border.all(color: Colors.blueAccent)
-
-                            ),
-                            child: Text(nw)),
-                      ) ]
-                  )
-                      : Text(recipeid.toString()),
-
-                ),
-              ),
-            ],
+            ),
           ),
-        ));
-  }
-
-  List<Text> createChildrenTexts() {
-    // Method 1
-//    List<Text> childrenTexts = List<Text>();
-//    for (String name in list) {
-//      childrenTexts.add(new Text(name, style: new TextStyle(color: Colors.red),));
-//    }
-//    return childrenTexts;
-
-    // Method 2
-    return name!.map((text) => Text(text, style: TextStyle(color: Colors.blue),)).toList();
-  }
-
-  Widget getTextWidgets(List<String> strings)
-  {
-    //return new Row(children: strings.map((item) => new Text(item)).toList());
-    return Row(children: [ for (var nw in name!) Text(nw) ]);
+          Flexible(
+            child: ListView(
+              padding: EdgeInsets.all(16),
+              children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 40.0, left: 30.0, right: 30.0),
+                  child: TextField(
+                    controller: controllers,
+                    decoration: InputDecoration(
+                      labelText: "New Ingredient..",
+                      contentPadding: const EdgeInsets.only(
+                          left: 14.0, bottom: 8.0, top: 15.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.black),
+                        borderRadius: new BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.black),
+                        borderRadius: new BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 35.0),
+            child: MaterialButton(
+                minWidth: 160,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                onPressed: () {
+                  //assign the typed ingredient into a list
+                  var list = [controllers.text];
+                  FirebaseFirestore.instance
+                      .collection('recipe')
+                      //pass the recipe id to know which document/record to update
+                      .doc(recipeid)
+                      //update method
+                      .update({
+                    //add the ingredient inside the ingredients array
+                    "ingredients": FieldValue.arrayUnion(list)
+                  });
+                  controllers.text = "";
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Row(
+                      children: const [
+                        Icon(
+                          Icons.playlist_add_check,
+                          color: Colors.greenAccent,
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(child: Text('Ingredient Added Successfully!')),
+                      ],
+                    ),
+                  ));
+                },
+                color: Colors.black,
+                child: const Text(
+                  '+ Add Ingredient',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                )),
+          ),
+        ],
+      ),
+    ));
   }
 }
-
-

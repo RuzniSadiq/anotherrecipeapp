@@ -1,11 +1,11 @@
 import 'dart:io';
+
 import 'package:anotherrecipeapp/models/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'loginpage.dart';
-
 
 class Register extends StatefulWidget {
   @override
@@ -14,10 +14,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   _RegisterState();
-
   bool showProgress = false;
   bool visible = false;
-
   final _formkey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   CollectionReference ref = FirebaseFirestore.instance.collection('userz');
@@ -30,41 +28,40 @@ class _RegisterState extends State<Register> {
   bool _isObscure = true;
   bool _isObscure2 = true;
   File? file;
-  // var options = [
-  //   'User',
-  //   'Admin',
-  // ];
-  var _currentItemSelected = "User";
   var rool = "User";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[900],
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.orangeAccent[700],
+              color: Colors.white10,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.all(12),
+                  margin: EdgeInsets.all(22),
                   child: Form(
                     key: _formkey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.all(1),
+                          child: Image.asset("assets/logo.png"),
+                        ),
+
                         SizedBox(
-                          height: 80,
+                          height: 10,
                         ),
                         Text(
                           "Register Now",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 40,
                           ),
                         ),
@@ -72,7 +69,7 @@ class _RegisterState extends State<Register> {
                           height: 10,
                         ),
                         SizedBox(
-                          height: 50,
+                          height: 30,
                         ),
                         TextFormField(
                           controller: emailController,
@@ -84,12 +81,12 @@ class _RegisterState extends State<Register> {
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: new BorderSide(color: Colors.white),
-                              borderRadius: new BorderRadius.circular(20),
+                              borderSide: new BorderSide(color: Colors.black),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: new BorderSide(color: Colors.white),
-                              borderRadius: new BorderRadius.circular(20),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
                           ),
                           validator: (value) {
@@ -130,12 +127,12 @@ class _RegisterState extends State<Register> {
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 15.0),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: new BorderSide(color: Colors.white),
-                              borderRadius: new BorderRadius.circular(20),
+                              borderSide: new BorderSide(color: Colors.black),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: new BorderSide(color: Colors.white),
-                              borderRadius: new BorderRadius.circular(20),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
                           ),
                           validator: (value) {
@@ -174,12 +171,12 @@ class _RegisterState extends State<Register> {
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 15.0),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: new BorderSide(color: Colors.white),
-                              borderRadius: new BorderRadius.circular(20),
+                              borderSide: new BorderSide(color: Colors.black),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: new BorderSide(color: Colors.white),
-                              borderRadius: new BorderRadius.circular(20),
+                              borderRadius: new BorderRadius.circular(10),
                             ),
                           ),
                           validator: (value) {
@@ -245,7 +242,7 @@ class _RegisterState extends State<Register> {
                             MaterialButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
+                                      BorderRadius.all(Radius.circular(10.0))),
                               elevation: 5.0,
                               height: 40,
                               onPressed: () {
@@ -257,18 +254,19 @@ class _RegisterState extends State<Register> {
                                   ),
                                 );
                               },
+                              color: Colors.black,
                               child: Text(
                                 "Login",
                                 style: TextStyle(
                                   fontSize: 20,
+                                  color: Colors.white,
                                 ),
                               ),
-                              color: Colors.white,
                             ),
                             MaterialButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
+                                      BorderRadius.all(Radius.circular(10.0))),
                               elevation: 5.0,
                               height: 40,
                               onPressed: () {
@@ -279,7 +277,7 @@ class _RegisterState extends State<Register> {
                                     passwordController.text, rool);
                               },
                               child: Text(
-                                "Register",
+                                "Register Now",
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
@@ -287,17 +285,6 @@ class _RegisterState extends State<Register> {
                               color: Colors.white,
                             ),
                           ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "WEBFUN",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            color: Colors.yellowAccent[400],
-                          ),
                         ),
                       ],
                     ),
@@ -311,6 +298,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  //validate and signup method
   void signUp(String email, String password, String rool) async {
     CircularProgressIndicator();
     if (_formkey.currentState!.validate()) {
@@ -321,9 +309,11 @@ class _RegisterState extends State<Register> {
     }
   }
 
+  //add the user details to the database (method)
   postDetailsToFirestore(String email, String rool) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
+    //creating a usermodel object
     UserModel userModel = UserModel();
     userModel.email = email;
     userModel.uid = user!.uid;
@@ -331,6 +321,7 @@ class _RegisterState extends State<Register> {
     await firebaseFirestore
         .collection("userz")
         .doc(user.uid)
+    //insert to firebase database
         .set(userModel.toMap());
 
     Navigator.pushReplacement(

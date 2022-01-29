@@ -85,36 +85,24 @@ class _RecipeCategoryDetailsState extends State<RecipeCategoryDetails> {
 
           Flexible(
             child: StreamBuilder<List<Recipe>>(
+              //calling the readCategoryDetails method in the DatabaseHelper Class
+              //passing the category name
               stream: _db.readCategoryDetails(widget.category),
                 initialData: [],
-
               builder: (context, snapshot){
-                Recipe userz = Recipe();
                 if(snapshot.hasError){
-                  return Text("Error yo ${snapshot.error}");
+                  return Text("Error ${snapshot.error}");
                 }
                 //check if we have data
                 if(snapshot.hasData){
                   //accessing data/users
                   final recipiex =snapshot.data!;
-
-                  //building data/users
-                  //gridview start
-                  // return GridView.count(
-                  //   crossAxisCount: 2,
-                  //   children: recipiex.map(buildUser).toList(),
-
                     return ListView(
                       children: recipiex.map(buildUser).toList(),
-
-
-
                     );
-                  //end
-                  // );
 
                 }else{
-                  return Center(child: CircularProgressIndicator(),);
+                  return const Center(child: CircularProgressIndicator(),);
                 }
 
               }
