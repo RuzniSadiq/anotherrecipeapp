@@ -222,6 +222,11 @@ class _AddusersState extends State<Addusers> {
                           );
                           //access createRecipe method in DatabaseHelper class
                           _db.createRecipe(recipe);
+                          print("Recipe Added Successfully, Name: ${controllerName.text}");
+                          print("Recipe Added Successfully, Category: ${controllerCategory.text}");
+                          print("Recipe Added Successfully, Preparation Time: ${controllerPreparationtime.text}");
+                          print("Recipe Added Successfully, Instructions: ${controllerInstructions.text}");
+                          print("Recipe Added Successfully, Image: ${xx}");
 
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

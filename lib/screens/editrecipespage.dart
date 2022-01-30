@@ -176,6 +176,10 @@ class _EditRecipeDetailsState extends State<EditRecipeDetails> {
                             'preparationtime': controllerPreparationtime.text,
                             'instructions': controllerInstructions.text,
                           });
+                          print("Recipe Updated Successfully, Name: ${controllerName.text}");
+                          print("Recipe Updated Successfully, Category: ${controllerCategory.text}");
+                          print("Recipe Updated Successfully, Preparation Time: ${controllerPreparationtime.text}");
+                          print("Recipe Updated Successfully, Instructions: ${controllerInstructions.text}");
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Row(
                               children: const [

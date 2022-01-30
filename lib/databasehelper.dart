@@ -55,6 +55,7 @@ class DatabaseHelper{
   Future<void> logout(BuildContext context) async {
     CircularProgressIndicator();
     await u.FirebaseAuth.instance.signOut();
+    print("Signed out Successfully");
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

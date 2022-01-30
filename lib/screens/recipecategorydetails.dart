@@ -87,14 +87,17 @@ class _RecipeCategoryDetailsState extends State<RecipeCategoryDetails> {
             child: StreamBuilder<List<Recipe>>(
               //calling the readCategoryDetails method in the DatabaseHelper Class
               //passing the category name
+
               stream: _db.readCategoryDetails(widget.category),
                 initialData: [],
               builder: (context, snapshot){
                 if(snapshot.hasError){
                   return Text("Error ${snapshot.error}");
                 }
+                print("Listing all Recipes matching Category: ${widget.category}");
                 //check if we have data
                 if(snapshot.hasData){
+                  //print("Listing all Recipes mathing Category: ${widget.category}");
                   //accessing data/users
                   final recipiex =snapshot.data!;
                     return ListView(

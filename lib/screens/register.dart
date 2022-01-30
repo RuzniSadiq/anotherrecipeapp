@@ -323,6 +323,9 @@ class _RegisterState extends State<Register> {
         .doc(user.uid)
     //insert to firebase database
         .set(userModel.toMap());
+    print("User Signed Up email - ${userModel.email}");
+    print("User Signed Up user unique ID - ${userModel.uid}");
+    print("User Signed Up role - ${userModel.wrool}");
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));

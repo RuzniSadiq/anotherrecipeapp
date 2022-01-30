@@ -93,6 +93,7 @@ class addIngredients extends StatelessWidget {
                     //add the ingredient inside the ingredients array
                     "ingredients": FieldValue.arrayUnion(list)
                   });
+                  print("Ingredient Added Successfully, Ingredient: ${controllers.text}");
                   controllers.text = "";
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Row(

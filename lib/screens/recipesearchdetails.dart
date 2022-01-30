@@ -96,6 +96,7 @@ class _RecipeSearchDetailsState extends State<RecipeSearchDetails> {
                 }
                 //check if we have data
                 if(snapshot.hasData){
+                  print("Listing all Recipes matching Name: ${widget.name}");
                   //accessing data
                   final recipiex =snapshot.data!;
                     return ListView(

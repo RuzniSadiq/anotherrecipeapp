@@ -147,6 +147,7 @@ class _ViewRecipeDetailsState extends State<ViewRecipeDetails> {
                                 child: GestureDetector(
                                   onTap: () {
                                     _db.deletemethod(widget.recipeid!);
+                                    print("Recipe Deleted Successfully, Recipe ID: ${widget.recipeid}");
 
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(

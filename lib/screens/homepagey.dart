@@ -212,6 +212,7 @@ class _HomepageyState extends State<Homepagey> {
                                       //add the user id inside the favourites array
                                       "favourites": FieldValue.arrayUnion(list)
                                     });
+                                    print("Recipe Added to Favourties with User ID: ${widget.id}");
 
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(

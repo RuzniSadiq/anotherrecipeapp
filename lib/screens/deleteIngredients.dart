@@ -89,6 +89,7 @@ class deleteIngredients extends StatelessWidget {
                     //delete the ingredient from the ingredients array
                     "ingredients": FieldValue.arrayRemove(list)
                   });
+                  print("Ingredient Deleted Successfully, Ingredient: ${controllers.text}");
                   controllers.text = "";
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Row(

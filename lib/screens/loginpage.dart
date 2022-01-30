@@ -265,6 +265,7 @@ class _LoginPageState extends State<LoginPage> {
             await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
+
         );
         Navigator.pushReplacement(
           context,
@@ -272,6 +273,7 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) => RoutePage(),
           ),
         );
+        print("Logged in Successfully with ${email} and $password");
       }
       //if invalid catch the error
       on FirebaseAuthException catch (e) {

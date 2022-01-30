@@ -195,7 +195,9 @@ class _viewFavouritesState extends State<viewFavourites> {
                                   .update({
                                 //remove the user id which is inside the favourites array
                                 "favourites": FieldValue.arrayRemove(list)
+
                               });
+                              print("Recipe Removed from Favourties, User ID: ${widget.id}");
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Row(
